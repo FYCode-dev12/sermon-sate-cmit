@@ -49,11 +49,19 @@
       .slide{
         position:absolute; inset:0;
         display:none;
-        flex-direction:column; align-items:center; justify-content:center;
+        flex-direction:column; align-items:center; justify-content:flex-start;
         text-align:center;
         padding:4.5rem clamp(1.25rem,6vw,6rem) 6.5rem;
         overflow-y:auto;
+        touch-action:pan-y;
+        overscroll-behavior:contain;
       }
+      /* Center the content when it fits the slide. When the content is
+         taller than the slide, the auto margins collapse to 0, so the
+         top stays reachable and the slide scrolls through its full
+         height instead of clipping its top. */
+      .slide > :first-child{ margin-top:auto; }
+      .slide > :last-child{ margin-bottom:auto; }
       .slide.active{ display:flex; animation:fadein .45s ease both; }
       @keyframes fadein{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:none;} }
       @media (prefers-reduced-motion: reduce){ .slide.active{ animation:none; } }
@@ -192,14 +200,14 @@
       .notes .n-tag{ color:var(--gold); font-size:.68rem; font-weight:600; letter-spacing:.26em; text-transform:uppercase; margin:0 0 .45rem; }
       .notes p{ margin:0; color:var(--cream); font-weight:300; line-height:1.65; font-size:.98rem; }
 
-      .tapzones{ position:fixed; inset:0; z-index:5; display:flex; pointer-events:none; }
-      .tapzones span{ flex:1; pointer-events:auto; }
-      .tapzones span.right{ flex:2; }
-
       @media (max-width:760px){
         .cards.two,.cards.three,.steps{ grid-template-columns:1fr; }
         .slide{ padding:3.2rem 1.2rem 7.5rem; justify-content:flex-start; overflow-y:auto; }
         .slide.center-v{ justify-content:center; }
+        .slide > :first-child{ margin-top:0; }
+        .slide > :last-child{ margin-bottom:0; }
+        .slide.center-v > :first-child{ margin-top:auto; }
+        .slide.center-v > :last-child{ margin-bottom:auto; }
         .hint{ display:none; }
         .bottombar{ padding:0 .6rem .7rem; gap:.4rem; }
         .controls{ gap:.35rem; }
@@ -207,9 +215,7 @@
         .controls .lbl, .notes-toggle .lbl{ display:none; }
         .notes{ bottom:5.2rem; }
       }
-    
-.notes-toggle, .notes{ display:none !important; }
-</style>
+    </style>
   </head>
   <body>
     <div class="sky" id="sky" aria-hidden="true"><div class="hill"></div></div>
@@ -219,7 +225,7 @@
     <main class="deck" id="deck">
 
       <!-- 1 · JUDUL -->
-      <section class="slide center-v active">
+      <section class="slide center-v active" data-note="Sapa dengan santai dulu. Bilang terus terang: malam ini bukan sesi evaluasi dan tidak ada pembacaan daftar kesalahan siapa pun. Ini menegur aku duluan, baru kita semua. Renungan ini untuk siapa saja yang capek melayani. Kita bukan tokoh utama malam ini, Yesus yang tokoh utama.">
         <div class="moon-mark" aria-hidden="true">🌙</div>
         <p class="kicker">Sebuah Renungan untuk yang Capek Melayani</p>
         <h1>Semua Tertidur,<br /><strong>Yesus Tetap Berjaga</strong></h1>
@@ -229,14 +235,14 @@
       </section>
 
       <!-- 2 · PEMBUKA -->
-      <section class="slide center-v">
+      <section class="slide center-v" data-note="Buka dengan pertanyaan di layar ini: ucapkan pelan, lalu beri jeda beberapa detik supaya semua sempat mengingat pengalamannya sendiri. Lalu pakai analogi Close Friends: kalau Yesus punya Close Friends, Petrus pasti masuk, bahkan paling sering diajak ke momen paling pribadi, naik gunung waktu Yesus dimuliakan, masuk ke kamar waktu anak Yairus dibangkitkan, diajak lebih dekat di Getsemani. Yang lain followers, Petrus bestie, dan bestie ini ketiduran juga, murid yang paling dekat dengan Yesus pun tertidur di malam paling penting.">
         <p class="kicker">Pembuka</p>
         <p class="opener">“Pernah nggak, sore harinya kalian berjanji dengan semangat yang luar biasa, lalu malamnya kalian <span class="hl">ketiduran persis di momen yang paling penting</span>?”</p>
         <p class="cf-line">Petrus saja, yang masuk <strong>Close Friends-nya Yesus</strong>, ketiduran juga.</p>
       </section>
 
       <!-- 3 · PEMBACAAN FIRMAN -->
-      <section class="slide">
+      <section class="slide" data-note="Ajak semua membuka Alkitab dan bacakan ayat 38 dan 40 sampai 41 dengan pelan. Beri jeda sesudah kalimat roh memang penurut, tetapi daging lemah. Kalimat itu bukan tamparan, itu Yesus yang mengerti keadaan kita.">
         <p class="kicker">Pembacaan Firman</p>
         <blockquote class="scripture">
           “<span class="hl">Hati-Ku sangat sedih</span>, seperti mau mati rasanya. Tinggallah di sini dan <span class="hl">berjaga-jagalah dengan Aku</span>.” … “Tidakkah kamu sanggup <span class="hl">berjaga-jaga satu jam saja</span> dengan Aku? Berjaga-jagalah dan berdoalah, supaya kamu jangan jatuh ke dalam pencobaan: <span class="hl">roh memang penurut, tetapi daging lemah</span>.”
@@ -245,7 +251,7 @@
       </section>
 
       <!-- 4 · CERITA DI TAMAN -->
-      <section class="slide">
+      <section class="slide" data-note="Bangun tegangannya: malam terakhir sebelum salib tidak dimulai di pengadilan atau di bukit, tapi di taman yang sepi. Petrus yang paling pede justru yang paling cepat tertidur. Semangat jam tujuh malam belum tentu bertahan sampai jam dua belas, kita semua tahu rasanya. Jelaskan juga arti nama Getsemani: tempat pemerasan minyak zaitun, di taman inilah Yesus diperas oleh duka dan ketaatan sampai doa-Nya menjadi penyerahan penuh kepada Bapa. Ayat-ayat persisnya ada di slide berikutnya, bacakan dari teksnya, jangan dari ingatan.">
         <p class="kicker">Cerita di Taman</p>
         <h2>Malam terakhir sebelum salib<br />dimulai <strong>di sebuah taman</strong></h2>
         <p class="lead">Bukan di ruang sidang, bukan di bukit tengkorak. Di taman yang gelap dan sepi, Yesus mengajak murid-murid terdekat-Nya untuk satu hal sederhana: <strong>menemani Dia berdoa.</strong></p>
@@ -264,7 +270,7 @@
       </section>
 
       <!-- 5 · CERITA DI TAMAN · TIGA KALI IA KEMBALI -->
-      <section class="slide">
+      <section class="slide" data-note="Bacakan ketiga ayat ini persis dari Alkitab, jangan diparafrasekan. Ini koreksi penting dari cara kita biasa menceritakan Getsemani: Yesus tidak membangunkan mereka setiap kali. Pertama Ia menegur Petrus (ay. 40). Kedua, Ia mendapati mereka tidur lagi, lalu membiarkan mereka dan pergi berdoa untuk ketiga kalinya sendirian (ay. 43-44). Jangan bilang 'setiap kali Ia membangunkan mereka, lagi dan lagi', teksnya tidak berkata begitu. Faktanya justru lebih kuat: doa terberat malam itu Ia tanggung tanpa satu pun teman yang terjaga. Tuhan yang pernah berjaga sendirian di sebuah taman, itulah yang menanggungnya.">
         <p class="kicker">Cerita di Taman · Dari Teksnya Sendiri</p>
         <h2>Tiga kali Ia kembali,<br />tiga kali mereka <strong>tertidur</strong></h2>
         <div class="cards three">
@@ -285,7 +291,7 @@
       </section>
 
       <!-- 6 · DI TAMAN ITU, AKU MELIHAT DIRIKU · PENGAKUAN -->
-      <section class="slide">
+      <section class="slide" data-note="Ini bagian paling jujur, turunkan suara. Aku memandang orang-orang yang melayani bersamaku hanya dari hasil kerjanya, aku rajin mengurus tugasku tapi sering lupa menanyakan kabar orangnya. Aku juga merasa harus menanggung semuanya sendiri, lalu marah dalam hati. Tuhan menegurku lewat percakapan dengan saudara seiman dan lewat firman yang kudengar. Teguran itu untuk mendapatkanku kembali, bukan untuk membuangku. Jangan sebut nama, jangan sebut contoh tugas siapa pun.">
         <p class="kicker">Di Taman Itu, Aku Melihat Diriku</p>
         <blockquote class="big-quote">“Aku kesal kepada saudara-saudaraku bukan karena Tuhan sedih, tapi karena <span class="hl">aku takut dinilai gagal</span>.”</blockquote>
         <div class="cards two">
@@ -306,7 +312,7 @@
       </section>
 
       <!-- 7 · DI TAMAN ITU, AKU MELIHAT DIRIKU · DUA CARA TERTIDUR -->
-      <section class="slide">
+      <section class="slide" data-note="Di sini mulai masuk ke kita, tapi tetap ringan. Cara pertama gampang dikenali. Cara kedua adalah caraku sendiri, katakan itu dengan senyum: aku ini laptop yang layarnya menyala, kelihatan kerja, tapi sebenarnya sudah sleep. Jangan tunjuk siapa pun untuk cara pertama.">
         <p class="kicker">Di Taman Itu, Aku Melihat Diriku</p>
         <h2>Dua cara tertidur<br />di Getsemani</h2>
         <div class="cards two">
@@ -325,7 +331,7 @@
       </section>
 
       <!-- 8 · TIGA KATA YUNANI -->
-      <section class="slide">
+      <section class="slide" data-note="Sampaikan dengan janji ini: kita lihat bahasa aslinya sebentar, dibahas tanpa bikin ngantuk, pas untuk perikop tentang orang mengantuk. Tekankan penutupnya: ini bukan gagasan teologi, ini Allah yang minta ditemani dan manusia yang tidak sanggup menemani.">
         <p class="kicker">Tiga Kata Yunani</p>
         <h2>Tiga kata Yunani<br />di taman itu</h2>
         <div class="cards three">
@@ -349,7 +355,7 @@
       </section>
 
       <!-- 9 · KABAR BAIKNYA · CAWAN -->
-      <section class="slide">
+      <section class="slide" data-note="Pelankan tempo di sini, bagian ini khidmat, tidak ada lelucon. Yesus tidak pura-pura kuat, Dia jujur minta cawan itu lalu kalau bisa, lalu menyerah pada kehendak Bapa. Dan Dia meminumnya sendirian, tanpa satu pun teman yang terjaga di samping-Nya.">
         <p class="kicker">Kabar Baiknya · Cawan yang Diminum Sendirian</p>
         <blockquote class="scripture">
           “Ya Bapa-Ku, jikalau sekiranya mungkin, <span class="hl">biarlah cawan ini lalu dari pada-Ku</span>, tetapi janganlah seperti yang Kukehendaki, <span class="hl">melainkan seperti yang Engkau kehendaki</span>.”
@@ -370,7 +376,7 @@
       </section>
 
       <!-- 10 · KABAR BAIKNYA · DITINGGALKAN -->
-      <section class="slide">
+      <section class="slide" data-note="Sambungkan salib ke kebangkitan, jangan berhenti di kesedihan. Karena Dia yang ditinggalkan, janji penyertaan Matius 28:20 berlaku untuk kita. Dan karena Penjaga Israel tidak tertidur, kita yang lemah ini justru boleh beristirahat. Penerimaan kita oleh Bapa tidak ditentukan performa pelayanan kita.">
         <p class="kicker">Kabar Baiknya · Ditinggalkan Supaya Kita Tidak Ditinggalkan</p>
         <blockquote class="scripture">
           “<span class="hl">Allah-Ku, Allah-Ku, mengapa Engkau meninggalkan Aku?</span>”
@@ -391,7 +397,7 @@
       </section>
 
       <!-- 11 · KABAR BAIKNYA · INJIL BUKAN NASIHAT -->
-      <section class="slide">
+      <section class="slide" data-note="Ini jantung gospel centered malam ini, jangan dilewati cepat. Kalau Getsemani hanya jadi nasihat supaya kita lebih rajin berjaga, kita pulang membawa beban baru. Kabar baiknya: yang gagal berjaga sudah ditanggung oleh Dia yang berjaga sendirian. Pelayanan kita adalah buah dan ucapan syukur, bukan syarat supaya diterima.">
         <p class="kicker">Kabar Baiknya · Injil Adalah Kabar Baik</p>
         <h2>Bukan nasihat baik,<br />melainkan <strong>kabar baik</strong></h2>
         <div class="cards two">
@@ -419,7 +425,7 @@
       </section>
 
       <!-- 12 · KABAR BAIKNYA · KALIMAT KUNCI -->
-      <section class="slide">
+      <section class="slide" data-note="Berhenti sejenak sebelum membaca kalimat ini. Bacakan pelan, lalu diam beberapa detik. Akuratnya begini, dan ini penting: Yesus tidak membangunkan mereka setiap kali. Dia tidak membuang mereka. Bahkan sekali Dia membiarkan mereka tidur dan menanggung doa itu sendirian. Lalu di akhir Dia berkata, 'Bangunlah, marilah kita pergi.' Kata 'kita' itu penting: setelah tiga kali gagal, mereka tetap diajak ikut. Ini ringkasan seluruh sharing malam ini: dosa kita nyata, tetapi orang yang tertidur tidak dibuang, ia dibangunkan dan diajak pergi bersama Dia.">
         <p class="kicker">Kabar Baiknya</p>
         <div class="star-mark" aria-hidden="true">✦</div>
         <h2 style="max-width:24ch">Kita semua tertidur dengan cara kita sendiri, tetapi <strong>Yesus tetap membangunkan kita</strong>, bukan membuang kita.</h2>
@@ -431,7 +437,7 @@
       </section>
 
       <!-- 13 · RUANG HENING -->
-      <section class="slide">
+      <section class="slide" data-note="Bacakan tiga pertanyaan ini satu per satu dengan jeda yang cukup di antaranya. Jangan buru-buru. Di sinilah mereka boleh capek di depan Yesus, boleh jujur, boleh menangis. Kita datang bukan untuk membuktikan diri, tapi karena sudah diterima lebih dulu.">
         <p class="kicker">Ruang Hening</p>
         <h2>Diam sebentar<br />di depan <strong>Yesus</strong></h2>
         <ol class="reflect">
@@ -442,7 +448,7 @@
       </section>
 
       <!-- 14 · BAWA PULANG -->
-      <section class="slide">
+      <section class="slide" data-note="Tutup dengan pertanyaan siapa yang sebenarnya kita layani: bukan tugas dan tanggung jawab, bukan citra diri di mata orang, melainkan Yesus. Dua langkah ini adalah respons karena sudah diterima, bukan syarat untuk diterima. Akhiri dengan membaca Matius 11:28 bersama, lalu doa penutup.">
         <p class="kicker">Bawa Pulang</p>
         <h2>Siapa yang sebenarnya<br /><strong>kita layani?</strong></h2>
         <div class="steps">
@@ -464,8 +470,6 @@
       </section>
 
     </main>
-
-    <div class="tapzones" aria-hidden="true"><span id="tapPrev"></span><span class="right" id="tapNext"></span></div>
 
     <div class="bottombar">
       <button class="notes-toggle" id="notesToggle" aria-expanded="false" aria-controls="notesPanel">Catatan<span class="lbl"> (N)</span></button>
@@ -550,8 +554,13 @@
           if (document.fullscreenElement) { document.exitFullscreen(); }
           else if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen(); }
         });
-        document.getElementById('tapPrev').addEventListener('click', prev);
-        document.getElementById('tapNext').addEventListener('click', next);
+        // Tap/click on the slide itself: left third goes back, the rest
+        // goes forward. The browser cancels the click after a scroll
+        // gesture, so scrolling inside a tall slide never changes slides.
+        document.getElementById('deck').addEventListener('click', function(e){
+          if (window.getSelection && String(window.getSelection())) return;
+          if (e.clientX < window.innerWidth / 3) prev(); else next();
+        });
 
         document.addEventListener('keydown', function(e){
           if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
@@ -566,14 +575,21 @@
           else if (e.key === 'Escape') { toggleNotes(false); }
         });
 
-        var touchX = null;
-        document.addEventListener('touchstart', function(e){ touchX = e.changedTouches[0].clientX; }, { passive:true });
+        var touchX = null, touchY = null;
+        document.addEventListener('touchstart', function(e){
+          touchX = e.changedTouches[0].clientX;
+          touchY = e.changedTouches[0].clientY;
+        }, { passive:true });
         document.addEventListener('touchend', function(e){
           if (touchX === null) return;
           var dx = e.changedTouches[0].clientX - touchX;
-          if (dx < -50) next();
-          else if (dx > 50) prev();
-          touchX = null;
+          var dy = e.changedTouches[0].clientY - touchY;
+          // Only a clearly horizontal swipe changes slides; vertical
+          // gestures belong to scrolling inside the slide.
+          if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            if (dx < 0) next(); else prev();
+          }
+          touchX = null; touchY = null;
         }, { passive:true });
 
         render();
